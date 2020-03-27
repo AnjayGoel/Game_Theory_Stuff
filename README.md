@@ -1,2 +1,2 @@
-# Game_Theory_Stuff
+# Game Theory Stuff
 Playing around with some games and algorithms
