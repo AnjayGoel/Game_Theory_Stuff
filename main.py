@@ -51,12 +51,9 @@ def cal_val(state):
     if state[0][0] + state[1][1] + state[2][2] in cons:
         return int((state[0][0] + state[1][1] + state[2][2]) / 3)*(1.0+depth)/10
     if state[0][2] + state[1][1] + state[2][0] in cons:
-        return int((state[0][2] + state[1][1] + state[2][1]) / 3)*(1.0+depth)/10
-
-    for i in state:
-        for j in i:
-            if j == 0:
-                return None
+        return int((state[0][2] + state[1][1] + state[2][0]) / 3)*(1.0+depth)/10
+    elif not is_filled(state):
+        return None
     return 0
 
 
@@ -66,14 +63,14 @@ def max_min(n: Node) -> int:
         n.value = cal_val(n.state)
     else:
         if n.p_type == 1:
-            n.value = -10
+            n.value = -100
             for child in list(n.nodes.values()):
                 max_min(child)
                 if child.value > n.value:
                     n.value = child.value
                     n.opt_next = child
         elif n.p_type == -1:
-            n.value = 10
+            n.value = 100
             for child in list(n.nodes.values()):
                 max_min(child)
                 if child.value < n.value:
@@ -85,8 +82,9 @@ def max_min(n: Node) -> int:
 def play(n:Node):
     while n is not None:
         print(n.state)
-        print(n.value)
-        print("-------------")
+        print("value: "+str(n.value))
+        print("stage value: "+str(cal_val(n.state)))
+        print("cells left:"+str(len(empty(n.state))))
         n = n.opt_next
 
 
@@ -97,7 +95,7 @@ def ex():
     try:
         print("Starting Minmax")
         max_min(node)
-        play(node.nodes[0].nodes[1].nodes[3])
+        play(node)
         print("----------\n")
     except Exception as e:
         traceback.print_exc()
